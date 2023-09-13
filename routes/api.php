@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\ProjectController;
+use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +20,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/projects', [ProjectController::class, 'index']);
 
 Route::apiResource('/projects', ProjectController::class);
+
+Route::post('/contact-message', [ContactController::class, 'message']);
