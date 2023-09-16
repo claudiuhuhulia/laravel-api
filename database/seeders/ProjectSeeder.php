@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Faker\Generator;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -17,8 +18,10 @@ class ProjectSeeder extends Seeder
      */
     public function run(Generator $faker): void
     {
-        $type_ids = Type::pluck('id')->toArray();
 
+        $technology_ids = Technology::pluck('id')->toArray();
+
+        $type_ids = Type::pluck('id')->toArray();
 
         for ($i = 0; $i < 50; $i++) {
             $project = new Project();
@@ -28,6 +31,15 @@ class ProjectSeeder extends Seeder
             $project->image = $faker->imageURL(250, 250);
             $project->content = $faker->paragraphs(15, true);
             $project->save();
+
+            /* DOPO AVER SALVATO IL PROGETTO AGGIUNGO LA RELAZIONE N-N */
+
+            $project_technologies = [];
+            foreach ($technology_ids as $technology_id) {
+                if ($faker->boolean()) $project_technologies[] = $technology_id;
+            }
+
+            $project->technologies()->attach($project_technologies);
         }
     }
 }
