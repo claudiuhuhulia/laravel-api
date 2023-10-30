@@ -5,7 +5,7 @@
 
 @section('content')
     <header class="d-flex justify-content-between align-items-center">
-        <h1>Projects</h1>
+        <h1>Progetti</h1>
         <div class="d-flex">
             <a class="btn btn-success me-2" href="{{ route('admin.projects.create') }}">Nuovo Progetto</a>
             <a href="{{ route('admin.projects.trash') }}" class="btn btn-secondary">Cestino</a>
