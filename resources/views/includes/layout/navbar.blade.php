@@ -2,7 +2,6 @@
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
             {{ config('app.name', 'Portfolio') }}
-            {{-- config('app.name', 'Laravel') --}}
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -23,8 +22,8 @@
                             href="{{ route('admin.projects.index') }}">Progetti</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if (request()->routeIs('admin.projects*')) active @endif"
-                            href="{{ route('admin.projects.index') }}">Tecnologie</a>
+                        <a class="nav-link @if (request()->routeIs('admin.technologies*')) active @endif"
+                            href="{{ route('admin.technologies.index') }}">Tecnologie</a>
                     </li>
                 @endauth
             </ul>
