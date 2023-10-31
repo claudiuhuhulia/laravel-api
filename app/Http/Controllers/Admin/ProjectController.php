@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Image;
 use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Support\Facades\Storage;
@@ -47,7 +48,10 @@ class ProjectController extends Controller
             'image' => 'nullable|image:jpg,jpeg,png',
             'content' => 'required|string',
             'type_id' => 'nullable|exists:types,id',
-            'technologies' => 'nullable|exists:technologies,id'
+            'technologies' => 'nullable|exists:technologies,id',
+
+            // File validation
+            'multiple_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
 
 
         ], [
@@ -59,15 +63,28 @@ class ProjectController extends Controller
             'type_id.exists' => 'La categoria indicata è inesistente',
             'technologies.exists' => "uno o più tecnologie non sono valide",
 
+            // Images errors bag
+            'multiple_images.required' => "È richiesta almeno un'immagine.",
+            'multiple_images.image' => 'Le immagini devono essere di tipo jpeg,png,jpg,gif.',
+            'multiple_images.mimes' => 'Le immagini devono essere di tipo jpeg,png,jpg,gif.',
+            'multiple_images.max' => 'I file devono pesare max 2Mb.',
         ]);
         $data = $request->all();
 
+        $images = $request->file('multiple_images');
 
         $project = new Project();
 
-        if (array_key_exists('image', $data)) {
-            $img_url = Storage::putFile('projects_images', $data['image']);
-            $data['image'] = $img_url;
+        // ############# IMAGES #############
+        // Save multiple images
+        if ($images) {
+            foreach ($images as $image) {
+                $img_path = Storage::putFile("estate_images/$project->id", $image);
+                $new_image = new Image();
+                $new_image->url = $img_path;
+                $new_image->estate_id = $project->id;
+                $new_image->save();
+            };
         }
 
 
@@ -86,9 +103,6 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-
-
-
         return view('admin.projects.show', compact('project'));
     }
 
@@ -114,7 +128,10 @@ class ProjectController extends Controller
             'name' => ['required', 'string', 'max:50', Rule::unique('projects')->ignore($project)],
             'image' => 'nullable|image:jpg,jpeg,png',
             'content' => 'required|string',
-            'technologies' => 'nullable|exists:technologies,id'
+            'technologies' => 'nullable|exists:technologies,id',
+
+            // File validation
+            'multiple_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
 
         ], [
             'name.required' => 'Il nome è obbligatorio',
@@ -124,10 +141,36 @@ class ProjectController extends Controller
             'image.image' => "Il file caricato non è valido",
             'technologies.exists' => "uno o più tecnologie non sono valide",
 
+
+            // Images errors bag
+            'multiple_images.required' => "È richiesta almeno un'immagine.",
+            'multiple_images.image' => 'Le immagini devono essere di tipo jpeg,png,jpg,gif.',
+            'multiple_images.mimes' => 'Le immagini devono essere di tipo jpeg,png,jpg,gif.',
+            'multiple_images.max' => 'I file devono pesare max 2Mb.',
         ]);
         $data = $request->all();
         $data['slug'] = Str::slug($data['name'], '-');
         $project->update($data);
+
+        // Delete multiple images before update
+        Storage::deleteDirectory("project_images/$project->id");
+
+        foreach ($project->images as $image) {
+            $image->delete();
+        };
+
+        // Save multiple images
+        $images = $request->file('multiple_images');
+        if ($images) {
+            foreach ($images as $image) {
+                $img_path = Storage::putFile("project_images/$project->id", $image);
+                $new_image = new Image();
+                $new_image->url = $img_path;
+                $new_image->project_id = $project->id;
+                $new_image->save();
+            };
+        }
+
         if (!array_key_exists('technologies', $data) && count($project->technologies)) $project->technologies()->detach();
         elseif (array_key_exists('technologies', $data)) $project->technologies()->sync($data['technologies']);
 

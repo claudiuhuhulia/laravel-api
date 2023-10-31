@@ -28,7 +28,6 @@ class ProjectSeeder extends Seeder
             $project->type_id = Arr::random($type_ids);
             $project->name = $faker->text(20);
             $project->slug = Str::slug($project->name, '-');
-            $project->image = $faker->imageURL(250, 250);
             $project->content = $faker->paragraphs(15, true);
             $project->save();
 
