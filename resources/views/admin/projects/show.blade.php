@@ -12,9 +12,15 @@
         @endif
         <p>{{ $project->content }}</p>
         <div>
-            <strong>Creato il: </strong>{{ $project->created_at }}
-            <strong>Ultima modifica: </strong>{{ $project->updated_at }}
-            <strong>Categoria: </strong>{{ $project->type ? $project->type->label : 'Nessuna' }}
+            <strong> Creato il: </strong>{{ $project->created_at }}
+            <strong> Ultima modifica: </strong>{{ $project->updated_at }}
+            <strong> Categoria: </strong>{{ $project->type ? $project->type->label : 'Nessuna' }}
+        </div>
+        <div class="d-flex align-items-center my-3">
+            <strong> Tecnologie usate: </strong>
+            @foreach ($project->technologies as $technology)
+                <i class=" {{ $technology->icon }} mx-2"></i>
+            @endforeach
 
         </div>
     </div>
