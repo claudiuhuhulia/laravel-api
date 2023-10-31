@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Create Project')
+@section('title', 'Crea Progetto')
 
 @section('content')
     <header class="d-flex justify-content-between align-items center">
-        <h1>Crea Projetto</h1>
+        <h1>Crea Progetto</h1>
         <a class="btn btn-secondary my-3" href="{{ route('admin.projects.index') }}"><i
                 class="fas fa-arrow-left me-2"></i>Torna
             indietro</a>

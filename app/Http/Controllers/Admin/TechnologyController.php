@@ -22,7 +22,9 @@ class TechnologyController extends Controller
      */
     public function create()
     {
-        //
+        $technology = new Technology();
+
+        return view('admin.technologies.create', compact('technology'));
     }
 
     /**
@@ -30,7 +32,24 @@ class TechnologyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'label' => ['required', 'string', 'max:50', 'unique:technologies'],
+            'color' => 'nullable',
+            'icon' => 'required|string',
+
+        ], [
+            'label.required' => 'Il nome è obbligatorio',
+            'label.max' => 'Il nome deve essere lungo massimo :max caratteri',
+            'label.unique' => "Esiste già una tecnologia dal nome $request->label",
+            'icon.required' => "l'icona è richiesta",
+
+        ]);
+        $data = $request->all();
+
+        $technology = new Technology();
+        $technology->fill($data);
+        $technology->save();
+        return to_route('admin.technologies.show', compact('technology'))->with('alert-type', 'success')->with('alert-message', 'Tecnologia aggiunta con successo');;
     }
 
     /**
@@ -47,7 +66,8 @@ class TechnologyController extends Controller
      */
     public function edit(Technology $technology)
     {
-        //
+
+        return view('admin.technologies.edit', compact('technologies'));
     }
 
     /**
@@ -55,7 +75,22 @@ class TechnologyController extends Controller
      */
     public function update(Request $request, Technology $technology)
     {
-        //
+        $request->validate([
+            'label' => ['required', 'string', 'max:50', 'unique:technologies'],
+            'color' => 'nullable',
+            'icon' => 'required|string',
+
+        ], [
+            'label.required' => 'Il nome è obbligatorio',
+            'label.max' => 'Il nome deve essere lungo massimo :max caratteri',
+            'label.unique' => "Esiste già una tecnologia dal nome $request->label",
+            'icon.required' => "l'icona è richiesta",
+
+        ]);
+        $data = $request->all();
+        $technology->update($data);
+
+        return to_route('admin.technologiess.index', $technology)->with('alert-type', 'success')->with('alert-message', 'Tecnologia modificata con successo');
     }
 
     /**
@@ -63,6 +98,7 @@ class TechnologyController extends Controller
      */
     public function destroy(Technology $technology)
     {
-        //
+        $technology->forceDelete();
+        return to_route('admin.technologies.index')->with('alert-message', "Tecnologia eliminata definitivamente")->with('alert-type', 'danger');
     }
 }

@@ -33,7 +33,8 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth'])->group(function ()
 
     /* tecnologie */
     Route::get('/', [TechnologyController::class, 'index'])->name('technologies');
-    Route::get('/', [TechnologyController::class, 'show'])->name('technology');
+    Route::get('/technology', [TechnologyController::class, 'show'])->name('technology');
+    Route::resource('technologies', TechnologyController::class);
 });
 
 Route::middleware('auth')->group(function () {
