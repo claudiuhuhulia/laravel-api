@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="jumbotron p-5 mb-4 bg-light rounded-3">
-        <h1>Segui i miei progetti</h1>
+        <h1>I miei progetti</h1>
 
         @forelse ($projects as $project)
             <div class="card mb-4">
