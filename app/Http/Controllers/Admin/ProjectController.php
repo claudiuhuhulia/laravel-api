@@ -82,7 +82,7 @@ class ProjectController extends Controller
                 $img_path = Storage::putFile("estate_images/$project->id", $image);
                 $new_image = new Image();
                 $new_image->url = $img_path;
-                $new_image->estate_id = $project->id;
+                $new_image->project_id = $project->id;
                 $new_image->save();
             };
         }
