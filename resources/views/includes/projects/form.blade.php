@@ -54,7 +54,9 @@
             </select>
         </div>
     </div>
-    <div class="col-5">
+
+
+    {{--    <div class="col-5">
         <div class="mb-3">
             <label for="image" class="form-label">Url dell'immagine</label>
             <input type="file"
@@ -68,7 +70,39 @@
     <div class="col-1">
         <img src="{{ old('image', $project->image ?? 'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=') }}"
             alt="preview" class="img-fluid my-2" id="image-preview">
+    </div> --}}
+
+    {{-- Multiple images --}}
+    <div class="col-12 text-start">
+        <div class="mb-3">
+            <label class="form-label" for="multiple_images">Immagini</label>
+            @if (count($project->images) > 0)
+                <div id="oldImages">
+                    <div class="text-center py-2">Immagini attuali</div>
+                    <div class="row gap-3">
+                        @foreach ($project->images as $image)
+                            <div class="col-12 col-md-2 p-2">
+                                <img class="previewImages" src="{{ asset('storage/' . $image->url) }}" alt="">
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+            <input type="file" multiple id="multiple_images" name="multiple_images[]"
+                class="form-control @error('multiple_images') is-invalid @elseif (old('multiple_images')) is-valid @enderror"
+                value="{{ old('multiple_images', $project->images) }}">
+            <div id="previewTitle" class="text-center py-2">Nessuna immagine attualmente selezionata</div>
+            <div id="rowImages" class="row gap-3"></div>
+            @error('multiple_images')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
     </div>
+
+
+
     <div class="col-12">
         @foreach ($technologies as $technology)
             <div class="form-check form-check-inline">
@@ -91,3 +125,8 @@
     </div>
 </div>
 </form>
+
+{{-- Scritps --}}
+@section('scripts')
+    @Vite('resources/js/image-previewer.js')
+@endsection
