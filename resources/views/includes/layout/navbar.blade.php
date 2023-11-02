@@ -12,10 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link @if (request()->routeIs('guest.home')) active @endif"
-                        href="{{ url('/') }}">{{ __('Home') }}</a>
-                </li>
+
                 @auth
                     <li class="nav-item">
                         <a class="nav-link @if (request()->routeIs('admin.projects*')) active @endif"
