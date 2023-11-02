@@ -10,7 +10,7 @@
                     <h6 class="card-subtitle mb-2 text-body-secondary">{{ $project->created_at }}</h6>
                     <div class="clearfix">
                         <img class="float-start me-3" src="{{ $project->image }}" alt="{{ $project->name }}">
-                        <p class="card-text">{{ $project->content }}</p>
+                        <p class="card-text">{{ $project->getAbstract($project->content) }}</p>
                     </div>
                 </div>
             </div>

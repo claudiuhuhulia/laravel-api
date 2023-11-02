@@ -27,4 +27,15 @@ class Project extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function getAbstract($testo)
+    {
+        if (strlen($testo) > 199) {
+            $estratto = substr($testo, 0, 196) . '...';
+        } else {
+            $estratto = $testo;
+        }
+
+        return $estratto;
+    }
 }
