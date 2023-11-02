@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Technology;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TechnologyController extends Controller
 {
@@ -76,7 +77,7 @@ class TechnologyController extends Controller
     public function update(Request $request, Technology $technology)
     {
         $request->validate([
-            'label' => ['required', 'string', 'max:50', 'unique:technologies'],
+            'label' => ['required', 'string', 'max:50', Rule::unique('technologies')->ignore($technology)],
             'color' => 'nullable',
             'icon' => 'required|string',
 
@@ -90,7 +91,7 @@ class TechnologyController extends Controller
         $data = $request->all();
         $technology->update($data);
 
-        return to_route('admin.technologiess.index', $technology)->with('alert-type', 'success')->with('alert-message', 'Tecnologia modificata con successo');
+        return to_route('admin.technologies.index', $technology)->with('alert-type', 'success')->with('alert-message', 'Tecnologia modificata con successo');
     }
 
     /**
