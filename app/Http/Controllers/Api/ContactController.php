@@ -33,6 +33,8 @@ class ContactController extends Controller
         );
         Mail::to(env('MAIL_TO_ADDRESS'))->send($mail);
 
+        Mail::to("claudiu.huhulia@gmail.com")->send($mail);
+
         return response(null, 204);
     }
 }
